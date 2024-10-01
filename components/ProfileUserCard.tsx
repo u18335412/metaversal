@@ -11,11 +11,20 @@ import { Card, CardContent, CardFooter } from "./ui/card";
 import Image from "next/image";
 import fallbackImage from "@/app/avatar-fallback.svg";
 import { Skeleton } from "./ui/skeleton";
+import { Error } from "./ui/error";
 
 export const UserProfileCard: FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: user, isLoading } = useFetchUser(id);
+  const { data: user, isLoading, error } = useFetchUser(id);
   const { totalLikes, totalPosts } = useUserPostDetails(id);
+
+  if (error && error.status === 404)
+    return (
+      <Error
+        title="User not found"
+        description="We’re so sorry but it’s for the test."
+      />
+    );
 
   if (isLoading) return <UserCardSkeleton />;
 

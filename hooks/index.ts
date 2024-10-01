@@ -1,14 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { fetcher } from "@/lib/utils";
+import { fetcher, multiFetcher } from "@/lib/utils";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 
 export const useFetchUser = (id: string) => {
-  return useSWR(`user/${id}`, () =>
-    fetcher(
-      `https://dummyjson.com/users/${id}?select=firstName,lastName,username,address,company`,
-    ),
+  return useSWR(
+    `user/${id}`,
+    () =>
+      fetcher(
+        `https://dummyjson.com/users/${id}?select=firstName,lastName,username,address,company`,
+      ),
+    {
+      onError: (err) => {
+        if (err.status === 404) return;
+      },
+    },
   );
 };
 
@@ -21,8 +28,14 @@ export const useFetchMinimalUser = (id: string) => {
 };
 
 export const useFetchUserPosts = (id: string) => {
-  return useSWR(`posts/user/${id}`, () =>
-    fetcher(`https://dummyjson.com/posts/users/${id}`),
+  return useSWR(
+    `posts/user/${id}`,
+    () => fetcher(`https://dummyjson.com/posts/users/${id}`),
+    {
+      onError: (err) => {
+        if (err.status === 404) return;
+      },
+    },
   );
 };
 
@@ -52,7 +65,12 @@ export const useFetchInfiniteUserPosts = (id: string) => {
     },
     [id],
   );
-  return useSWRInfinite(getUserPostsKey, fetcher, {});
+  return useSWRInfinite(getUserPostsKey, fetcher, {
+    onError: (err) => {
+      if (err.status === 404) return;
+    },
+    revalidateOnFocus: false,
+  });
 };
 
 export const useUserPostDetails = (id: string) => {
@@ -67,6 +85,45 @@ export const useUserPostDetails = (id: string) => {
     totalLikes,
     totalPosts: data?.total,
   };
+};
+
+export const useFetchWhoToFollow = () => {
+  const { data: ungrouped } = useSWR(
+    `posts/whotofollow`,
+    () =>
+      fetcher(
+        `https://dummyjson.com/posts?limit=0&select=userId&sortBy=userId&order=desc`,
+      ),
+    {
+      onError: (err) => {
+        if (err.status === 404) return;
+      },
+    },
+  );
+
+  const unsorted = Object.groupBy(ungrouped?.posts || [], (post: any) => {
+    return post.userId;
+  });
+
+  const sorted = Object.entries(unsorted)
+    .sort(([, a], [, b]) => {
+      if (a && b) {
+        return b?.length - a?.length;
+      }
+      return 0;
+    })
+    .slice(0, 4);
+
+  console.log("Grouped By User Posts", Object.fromEntries(sorted));
+
+  const ids = Object.keys(Object.fromEntries(sorted)).map((key) => key);
+
+  const usersUrl = ids.map(
+    (id) =>
+      `https://dummyjson.com/users/${id}?select=firstName,lastName,username`,
+  );
+
+  return useSWR(`users/${ids}`, () => multiFetcher(usersUrl));
 };
 
 type State = {

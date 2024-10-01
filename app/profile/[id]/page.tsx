@@ -16,9 +16,7 @@ export default function Profile() {
         <section>
           <UserProfileCard />
         </section>
-
         <section className="mt-12 flex flex-col gap-4">
-          <h2 className="text-2xl">Recent</h2>
           <div>
             <RecentPosts />
           </div>
