@@ -8,12 +8,12 @@ export const DepartmentBadge: FC<{
 }> = ({ department, color }) => {
   return (
     <Badge
-      className={cn("px-3 py-1.5 rounded-xl pointer-events-none", {
-        "text-[#361FAD] bg-[#ECE9FB]": color === "purple",
-        "text-[#B61634] bg-[#FCE8EC]": color === "red",
-        "text-[#0077CC] bg-[#E5F4FF]": color === "blue",
-        "text-[#C03F0C] bg-[##FDEDE7]": color === "orange",
-        "text-[#1FADAD] bg-[#E9FBFB]": color === "turquoise",
+      className={cn("pointer-events-none rounded-xl px-3 py-1.5", {
+        "bg-[#ECE9FB] text-[#361FAD]": color === "purple",
+        "bg-[#FCE8EC] text-[#B61634]": color === "red",
+        "bg-[#E5F4FF] text-[#0077CC]": color === "blue",
+        "bg-[##FDEDE7] text-[#C03F0C]": color === "orange",
+        "bg-[#E9FBFB] text-[#1FADAD]": color === "turquoise",
       })}
     >
       <h4 className="text-base">{department}</h4>

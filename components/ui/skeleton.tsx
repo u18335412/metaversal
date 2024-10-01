@@ -7,8 +7,8 @@ function Skeleton({
   return (
     <div
       className={cn(
-        "animate-pulse bg-muted bg-gradient-to-r from-[#ebedee] via-[#f9fafa] to-[#ebedee] h-10 rounded-full",
-        className
+        "h-10 animate-pulse rounded-full bg-muted bg-gradient-to-r from-[#ebedee] via-[#f9fafa] to-[#ebedee]",
+        className,
       )}
       {...props}
     />

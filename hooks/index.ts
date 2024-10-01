@@ -7,22 +7,22 @@ import useSWRInfinite from "swr/infinite";
 export const useFetchUser = (id: string) => {
   return useSWR(`user/${id}`, () =>
     fetcher(
-      `https://dummyjson.com/users/${id}?select=firstName,lastName,username,address,company`
-    )
+      `https://dummyjson.com/users/${id}?select=firstName,lastName,username,address,company`,
+    ),
   );
 };
 
 export const useFetchMinimalUser = (id: string) => {
   return useSWR(`user/minimal/${id}`, () =>
     fetcher(
-      `https://dummyjson.com/users/${id}?select=firstName,lastName,username`
-    )
+      `https://dummyjson.com/users/${id}?select=firstName,lastName,username`,
+    ),
   );
 };
 
 export const useFetchUserPosts = (id: string) => {
   return useSWR(`posts/user/${id}`, () =>
-    fetcher(`https://dummyjson.com/posts/users/${id}`)
+    fetcher(`https://dummyjson.com/posts/users/${id}`),
   );
 };
 
@@ -50,18 +50,18 @@ export const useFetchInfiniteUserPosts = (id: string) => {
         pageIndex * 5
       }`;
     },
-    [id]
+    [id],
   );
   return useSWRInfinite(getUserPostsKey, fetcher, {});
 };
 
 export const useUserPostDetails = (id: string) => {
   const { data } = useSWR(`user/${id}/post-details/`, () =>
-    fetcher(`https://dummyjson.com/posts/user/${id}?limit=0&select=reactions`)
+    fetcher(`https://dummyjson.com/posts/user/${id}?limit=0&select=reactions`),
   );
   const totalLikes = data?.posts?.reduce(
     (total: number, post: any) => post?.reactions.likes + total,
-    0
+    0,
   );
   return {
     totalLikes,
@@ -81,7 +81,7 @@ type UseIntersectionObserverOptions = {
   freezeOnceVisible?: boolean;
   onChange?: (
     isIntersecting: boolean,
-    entry: IntersectionObserverEntry
+    entry: IntersectionObserverEntry,
   ) => void;
   initialIsIntersecting?: boolean;
 };
@@ -89,7 +89,7 @@ type UseIntersectionObserverOptions = {
 type IntersectionReturn = [
   (node?: Element | null) => void,
   boolean,
-  IntersectionObserverEntry | undefined
+  IntersectionObserverEntry | undefined,
 ] & {
   ref: (node?: Element | null) => void;
   isIntersecting: boolean;
@@ -139,7 +139,7 @@ export function useIntersectionObserver({
           const isIntersecting =
             entry.isIntersecting &&
             thresholds.some(
-              (threshold) => entry.intersectionRatio >= threshold
+              (threshold) => entry.intersectionRatio >= threshold,
             );
 
           setState({ isIntersecting, entry });
@@ -154,7 +154,7 @@ export function useIntersectionObserver({
           }
         });
       },
-      { threshold, root, rootMargin }
+      { threshold, root, rootMargin },
     );
 
     observer.observe(ref);

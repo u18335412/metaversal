@@ -3,33 +3,33 @@ import { Skeleton } from "./ui/skeleton";
 
 export const PostSkeleton: FC = () => {
   return (
-    <div className="h-48 bg-white rounded-2xl pb-4">
-      <div className="p-4 flex gap-3">
+    <div className="h-48 rounded-2xl bg-white pb-4">
+      <div className="flex gap-3 p-4">
         <div>
           <Skeleton className="size-10 rounded-full" />
         </div>
         <div>
-          <div className="gap-1 flex-col flex">
-            <Skeleton className="w-44 h-4" />
-            <Skeleton className="w-20 h-3.5" />
+          <div className="flex flex-col gap-1">
+            <Skeleton className="h-4 w-44" />
+            <Skeleton className="h-3.5 w-20" />
           </div>
 
           <div className="mt-3 flex flex-col gap-1">
-            <Skeleton className="w-56 h-3.5" />
-            <Skeleton className="w-48 h-3.5" />
+            <Skeleton className="h-3.5 w-56" />
+            <Skeleton className="h-3.5 w-48" />
           </div>
 
-          <div className="flex items-center gap-3 mt-3">
-            <Skeleton className="w-10 h-3.5" />
-            <Skeleton className="w-10 h-3.5" />
-            <Skeleton className="w-10 h-3.5" />
+          <div className="mt-3 flex items-center gap-3">
+            <Skeleton className="h-3.5 w-10" />
+            <Skeleton className="h-3.5 w-10" />
+            <Skeleton className="h-3.5 w-10" />
           </div>
         </div>
       </div>
-      <div className="p-4 border-t flex items-center gap-6">
-        <Skeleton className="w-10 h-5" />
-        <Skeleton className="w-10 h-5" />
-        <Skeleton className="w-10 h-5" />
+      <div className="flex items-center gap-6 border-t p-4">
+        <Skeleton className="h-5 w-10" />
+        <Skeleton className="h-5 w-10" />
+        <Skeleton className="h-5 w-10" />
       </div>
     </div>
   );
