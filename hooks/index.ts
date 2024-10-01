@@ -54,7 +54,7 @@ export const useFetchInfinitePosts = () => {
 export const useFetchInfiniteUserPosts = (id: string) => {
   const getUserPostsKey = useCallback(
     (pageIndex: number, previousPageData: any) => {
-      if (previousPageData && previousPageData.posts.length > 0) return null;
+      if (previousPageData && !(previousPageData.posts.length > 0)) return null;
       // first page, we don't have `previousPageData`
       if (pageIndex === 0)
         return `https://dummyjson.com/posts/user/${id}?limit=5`;
@@ -114,8 +114,6 @@ export const useFetchWhoToFollow = () => {
     })
     .slice(0, 4);
 
-  console.log("Grouped By User Posts", Object.fromEntries(sorted));
-
   const ids = Object.keys(Object.fromEntries(sorted)).map((key) => key);
 
   const usersUrl = ids.map(
@@ -123,7 +121,30 @@ export const useFetchWhoToFollow = () => {
       `https://dummyjson.com/users/${id}?select=firstName,lastName,username`,
   );
 
-  return useSWR(`users/${ids}`, () => multiFetcher(usersUrl));
+  return useSWR(`users/top/${ids}`, () => multiFetcher(usersUrl));
+};
+
+export const useFetchTopPosts = () => {
+  const { data } = useSWR(
+    `posts/top-posts`,
+    () =>
+      fetcher(`https://dummyjson.com/posts?limit=0&select=reactions&delay=0`),
+    {
+      onError: (err) => {
+        if (err.status === 404) return;
+      },
+    },
+  );
+
+  const sorted = data?.posts
+    .sort((a: any, b: any) => b.reactions.likes - a.reactions.likes)
+    .slice(0, 2);
+
+  const postUrls = sorted?.map(
+    (post: any) => `https://dummyjson.com/posts/${post?.id}`,
+  );
+
+  return useSWR(`posts/top/${sorted}`, () => multiFetcher(postUrls));
 };
 
 type State = {

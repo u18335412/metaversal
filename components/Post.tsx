@@ -57,7 +57,7 @@ export const Post: FC<{
         </span>
         <span className="flex items-center gap-1">
           <Eye className="size-4" />
-          {data?.reactions?.likes}
+          {data?.reactions?.views}
         </span>
       </CardFooter>
     </Card>
@@ -79,7 +79,7 @@ function User({ id }: { id: string }) {
   return (
     <Link href={`/profile/${id}`}>
       <CardHeader>
-        <CardTitle className="text-base hover:underline">
+        <CardTitle className="line-clamp-2 text-base hover:underline">
           {user?.firstName} {user?.lastName}
         </CardTitle>
         <CardDescription className="text-xs">@{user?.username}</CardDescription>

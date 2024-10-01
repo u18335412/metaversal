@@ -14,9 +14,19 @@ body {
     font-optical-sizing: auto;
     font-weight: 800;
     font-style: normal;
-    font-variation-settings: "slnt" 0, "wdth" 150, "GRAD" 0, "XOPQ" 96,
-      "XTRA" 468, "YOPQ" 79, "YTAS" 750, "YTDE" -203, "YTFI" 738, "YTLC" 514,
+    font-variation-settings:
+      "slnt" 0,
+      "wdth" 150,
+      "GRAD" 0,
+      "XOPQ" 96,
+      "XTRA" 468,
+      "YOPQ" 79,
+      "YTAS" 750,
+      "YTDE" -203,
+      "YTFI" 738,
+      "YTLC" 514,
       "YTUC" 712;
+    line-height: normal;
   }
 }
 

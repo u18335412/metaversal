@@ -1,12 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "./ui/card";
+import { Card, CardHeader } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 
 export const UserCardSmallSkeleton = () => {
