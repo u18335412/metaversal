@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 
+// Data caching is handle through useSWR
+
 export const useFetchUser = (id: string) => {
   return useSWR(
     `user/${id}`,
