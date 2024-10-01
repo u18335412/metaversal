@@ -57,7 +57,7 @@ export const Post: FC<{
         </span>
         <span className="flex items-center gap-1">
           <Eye className="size-4" />
-          {data?.reactions?.views}
+          {data?.views}
         </span>
       </CardFooter>
     </Card>
