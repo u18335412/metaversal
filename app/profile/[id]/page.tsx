@@ -3,6 +3,8 @@ import { UserProfileCard } from "@/components/ProfileUserCard";
 import { RecentPosts } from "@/components/RecentPosts";
 import { ChevronLeft } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default function Profile() {
   return (
     <div>

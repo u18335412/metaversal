@@ -2,7 +2,9 @@ import { Posts } from "@/components/Posts";
 import { SuggestedPosts } from "@/components/SuggestedPosts";
 import { WhoToFollow } from "@/components/WhoToFollow";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
   return (
     <div>
       <header className="flex h-[3.5rem] items-center justify-center border border-[#DFDFDF] bg-white">
