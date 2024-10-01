@@ -1,6 +1,73 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { fetcher } from "@/lib/utils";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
+
+export const useFetchUser = (id: string) => {
+  return useSWR(`user/${id}`, () =>
+    fetcher(
+      `https://dummyjson.com/users/${id}?select=firstName,lastName,username,address,company`
+    )
+  );
+};
+
+export const useFetchMinimalUser = (id: string) => {
+  return useSWR(`user/minimal/${id}`, () =>
+    fetcher(
+      `https://dummyjson.com/users/${id}?select=firstName,lastName,username`
+    )
+  );
+};
+
+export const useFetchUserPosts = (id: string) => {
+  return useSWR(`posts/user/${id}`, () =>
+    fetcher(`https://dummyjson.com/posts/users/${id}`)
+  );
+};
+
+const getPostKey = (pageIndex: number, previousPageData: any) => {
+  if (previousPageData && !previousPageData) return null;
+  // first page, we don't have `previousPageData`
+  if (pageIndex === 0) return "https://dummyjson.com/posts?limit=5";
+  // add the cursor to the API endpoint
+  return `https://dummyjson.com/posts?limit=5&skip=${pageIndex * 5}`;
+};
+
+export const useFetchInfinitePosts = () => {
+  return useSWRInfinite(getPostKey, fetcher, {});
+};
+
+export const useFetchInfiniteUserPosts = (id: string) => {
+  const getUserPostsKey = useCallback(
+    (pageIndex: number, previousPageData: any) => {
+      if (previousPageData && previousPageData.posts.length > 0) return null;
+      // first page, we don't have `previousPageData`
+      if (pageIndex === 0)
+        return `https://dummyjson.com/posts/user/${id}?limit=5`;
+      // add the cursor to the API endpoint
+      return `https://dummyjson.com/posts/user/${id}?limit=5&skip=${
+        pageIndex * 5
+      }`;
+    },
+    [id]
+  );
+  return useSWRInfinite(getUserPostsKey, fetcher, {});
+};
+
+export const useUserPostDetails = (id: string) => {
+  const { data } = useSWR(`user/${id}/post-details/`, () =>
+    fetcher(`https://dummyjson.com/posts/user/${id}?limit=0&select=reactions`)
+  );
+  const totalLikes = data?.posts?.reduce(
+    (total: number, post: any) => post?.reactions.likes + total,
+    0
+  );
+  return {
+    totalLikes,
+    totalPosts: data?.total,
+  };
+};
 
 type State = {
   isIntersecting: boolean;
@@ -107,7 +174,6 @@ export function useIntersectionObserver({
     freezeOnceVisible,
   ]);
 
-  // ensures that if the observed element changes, the intersection observer is reinitialized
   const prevRef = useRef<Element | null>(null);
 
   useEffect(() => {
@@ -129,32 +195,9 @@ export function useIntersectionObserver({
     state.entry,
   ] as IntersectionReturn;
 
-  // Support object destructuring, by adding the specific values.
   result.ref = result[0];
   result.isIntersecting = result[1];
   result.entry = result[2];
 
   return result;
 }
-
-export const useFetchUser = (id: string) => {
-  return useSWR(`user/${id}`, () =>
-    fetcher(
-      `https://dummyjson.com/users/${id}?select=firstName,lastName,username,address,company&delay=5000`
-    )
-  );
-};
-
-export const useFetchMinimalUser = (id: string) => {
-  return useSWR(`user/minimal/${id}`, () =>
-    fetcher(
-      `https://dummyjson.com/users/${id}?select=firstName,lastName,username&delay=500`
-    )
-  );
-};
-
-export const useFetchUserPosts = (id: string) => {
-  return useSWR(`posts/user/${id}`, () =>
-    fetcher(`https://dummyjson.com/posts/users/${id}`)
-  );
-};

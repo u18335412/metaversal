@@ -69,10 +69,10 @@ function User({ id }: { id: string }) {
 
   if (isLoading) {
     return (
-      <div className="gap-2 flex-col flex pr-12 py-4">
+      <CardHeader className="gap-2 flex-col flex mr-12 py-4">
         <Skeleton className="w-44 h-4" />
         <Skeleton className="w-20 h-3.5" />
-      </div>
+      </CardHeader>
     );
   }
 
